@@ -40,19 +40,15 @@ def index():
         if "Could not retrieve a transcript" in transcript:
             error = "Could not retrieve a transcript for the provided video URL."
         else:
+           try:
             summary_text = generate_content(transcript, prompt)
             summary_points = summary_text.split('.')
             summary = [point.strip() for point in summary_points if point.strip()]
-            # thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
             thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
+           except Exception as e:
+            error = f"An error occurred while generating the summary: {str(e)}"
 
-        return render_template(
-        "VideoQuick.html",
-        summary=summary,
-        error=error,
-        video_id=video_id,
-        thumbnail_url=thumbnail_url,
-    )
+    return render_template('VideoQuick.html', summary=summary, error=error, video_id=video_id, thumbnail_url=thumbnail_url)
 
     
     # return render_template('VideoQuick.html', summary=summary, error=error, video_id=video_id, thumbnail_url=thumbnail_url)
